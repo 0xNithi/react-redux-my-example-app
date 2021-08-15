@@ -1,16 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+const Home = React.lazy(() => import('pages/Home'));
+const NotFound = React.lazy(() => import('pages/NotFound'));
 
 const App: React.FC = () => (
-  <>
-    <div className="text-black">react-redux-my-example-app</div>
-    <button
-      type="button"
-      onClick={() => document.documentElement.classList.toggle('dark')}
-      className="text-black bg-blue-300 p-1"
-    >
-      Toggle
-    </button>
-  </>
+  <Router>
+    <React.Suspense fallback={<></>}>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+    </React.Suspense>
+  </Router>
 );
 
 export default App;
