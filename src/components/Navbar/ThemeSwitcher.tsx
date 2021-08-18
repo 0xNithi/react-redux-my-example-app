@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useTheme } from 'state/user/hooks';
 
 const ThemeSwitcher: React.FC = () => {
-  const [isDark, setIsDark] = useState<boolean>(false);
-
-  const toggleTheme = (): void => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
-  };
-
+  const [isDark, toggleTheme] = useTheme();
   return (
     <button type="button" onClick={toggleTheme} className="btn">
       <svg
