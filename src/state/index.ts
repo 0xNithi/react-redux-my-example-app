@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { save, load } from 'redux-localstorage-simple';
 import { useDispatch } from 'react-redux';
 import userReducer from './user';
+import articlesReducer from './articles';
 
 const PERSISTED_KEYS = {
   states: ['user'],
@@ -11,6 +12,7 @@ const PERSISTED_KEYS = {
 const store = configureStore({
   reducer: {
     user: userReducer,
+    articles: articlesReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ thunk: true }).concat(save(PERSISTED_KEYS)),
   preloadedState: load(PERSISTED_KEYS),
