@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ArticlesState } from 'state/types';
+import ArticleAPI from 'api/article';
 
 export const initialState: ArticlesState = {
   data: [],
 };
 
 export const fetchArticles = createAsyncThunk('articles/fetchArticles', async () => {
-  const res = await fetch('https://node-express-my-example-app.vercel.app/v1/articles');
-  const json = await res.json();
-  return json;
+  const response = await ArticleAPI.all();
+  return response.data;
 });
 
 export const articlesSlice = createSlice({
