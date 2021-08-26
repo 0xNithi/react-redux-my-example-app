@@ -1,3 +1,8 @@
+export interface Token {
+  token: string;
+  expires: Date;
+}
+
 export interface Article {
   id: string;
   title: string;
@@ -5,16 +10,16 @@ export interface Article {
 }
 
 export interface UserState {
-  data:
+  user:
     | {
-        userId: string;
+        id: string;
         username: string;
       }
     | undefined;
-  token: string;
+  tokens: { access: Token; refresh: Token } | undefined;
   isDark: boolean;
 }
 
 export interface ArticlesState {
-  data: Article[];
+  articles: Article[];
 }

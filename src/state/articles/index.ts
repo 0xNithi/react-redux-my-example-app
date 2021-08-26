@@ -3,7 +3,7 @@ import { ArticlesState } from 'state/types';
 import ArticleAPI from 'api/article';
 
 export const initialState: ArticlesState = {
-  data: [],
+  articles: [],
 };
 
 export const fetchArticles = createAsyncThunk('articles/fetchArticles', async () => {
@@ -17,7 +17,7 @@ export const articlesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchArticles.fulfilled, (state, action) => {
-      state.data = action.payload.results;
+      state.articles = action.payload.results;
     });
   },
 });

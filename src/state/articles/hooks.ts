@@ -4,14 +4,13 @@ import { useAppDispatch, AppState } from 'state';
 import { Article } from 'state/types';
 import { fetchArticles } from '.';
 
-export const useFetchArticles = (): void => {
+export const useFetchArticles = (): { articles: Article[] } => {
   const dispatch = useAppDispatch();
+  const { articles } = useSelector<AppState, AppState['articles']>((state) => state.articles);
+
   useEffect(() => {
     dispatch(fetchArticles());
   }, [dispatch]);
-};
 
-export const useArticles = (): { articles: Article[] } => {
-  const { data } = useSelector<AppState, AppState['articles']>((state) => state.articles);
-  return { articles: data };
+  return { articles };
 };
