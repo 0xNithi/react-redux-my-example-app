@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import UserApi from 'api/user';
-import { UserState } from 'state/types';
+import { Token, UserState } from 'state/types';
 
 export const initialState: UserState = {
   user: undefined,
@@ -11,7 +11,7 @@ export const initialState: UserState = {
 export const fetchRegister = createAsyncThunk<
   {
     user: { id: string; username: string };
-    tokens: { access: { token: string; expires: Date }; refresh: { token: string; expires: Date } };
+    tokens: { access: Token; refresh: Token };
   },
   { username: string; password: string }
 >('user/fetchRegister', async ({ username, password }) => {
@@ -22,7 +22,7 @@ export const fetchRegister = createAsyncThunk<
 export const fetchLogin = createAsyncThunk<
   {
     user: { id: string; username: string };
-    tokens: { access: { token: string; expires: Date }; refresh: { token: string; expires: Date } };
+    tokens: { access: Token; refresh: Token };
   },
   { username: string; password: string }
 >('user/fetchLogin', async ({ username, password }) => {
@@ -40,13 +40,13 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRegister.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.tokens = action.payload.tokens;
+      .addCase(fetchRegister.fulfilled, (state, { payload: { user, tokens } }) => {
+        state.user = user;
+        state.tokens = tokens;
       })
-      .addCase(fetchLogin.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.tokens = action.payload.tokens;
+      .addCase(fetchLogin.fulfilled, (state, { payload: { user, tokens } }) => {
+        state.user = user;
+        state.tokens = tokens;
       });
   },
 });

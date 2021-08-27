@@ -1,9 +1,9 @@
 import api from 'utils/api';
-import { Article } from 'state/types';
+import { IArticleAPI } from './types';
 
-const ArticleAPI = {
+const ArticleAPI: IArticleAPI = {
   all: (page = 1, limit = 10) =>
-    api<{ results: Article[]; page: number; limit: number; totalPages: number; totoalResults: number }>({
+    api({
       method: 'get',
       url: `/articles`,
       params: {
@@ -11,37 +11,37 @@ const ArticleAPI = {
         limit,
       },
     }),
-  get: (articleId: string) => api<Article>({ method: 'get', url: `/articles/${articleId}` }),
-  create: (title: string, body: string, token: string) =>
-    api<Article>({
+  get: (articleId) => api({ method: 'get', url: `/articles/${articleId}` }),
+  create: (title, body, accessToken) =>
+    api({
       method: 'post',
       url: `/articles`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         title,
         body,
       },
     }),
-  update: (articleId: string, title: string, body: string, token: string) =>
-    api<Article>({
+  update: (articleId, title, body, accessToken) =>
+    api({
       method: 'patch',
       url: `/articles/${articleId}`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         title,
         body,
       },
     }),
-  delete: (articleId: string, token: string) =>
-    api<Article>({
+  delete: (articleId, accessToken) =>
+    api({
       method: 'delete',
       url: `/articles/${articleId}`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }),
 };

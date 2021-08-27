@@ -8,7 +8,7 @@ export const initialState: ArticlesState = {
 
 export const fetchArticles = createAsyncThunk('articles/fetchArticles', async () => {
   const response = await ArticleAPI.all();
-  return response.data;
+  return response;
 });
 
 export const articlesSlice = createSlice({
@@ -16,8 +16,8 @@ export const articlesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchArticles.fulfilled, (state, action) => {
-      state.articles = action.payload.results;
+    builder.addCase(fetchArticles.fulfilled, (state, { payload: { data } }) => {
+      state.articles = data.results;
     });
   },
 });

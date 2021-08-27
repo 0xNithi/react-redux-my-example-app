@@ -1,11 +1,17 @@
 import api from 'utils/api';
+import { IUserAPI } from './types';
 
-const UserApi = {
-  register: (username: string, password: string) =>
-    api<{
-      user: { id: string; username: string };
-      tokens: { access: { token: string; expires: Date }; refresh: { token: string; expires: Date } };
-    }>({
+const UserApi: IUserAPI = {
+  current: (accessToken) =>
+    api({
+      method: 'get',
+      url: '/users',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }),
+  register: (username, password) =>
+    api({
       method: 'post',
       url: '/auth/register',
       data: {
@@ -13,16 +19,21 @@ const UserApi = {
         password,
       },
     }),
-  login: (username: string, password: string) =>
-    api<{
-      user: { id: string; username: string };
-      tokens: { access: { token: string; expires: Date }; refresh: { token: string; expires: Date } };
-    }>({
+  login: (username, password) =>
+    api({
       method: 'post',
       url: '/auth/login',
       data: {
         username,
         password,
+      },
+    }),
+  logout: (refreshToken) =>
+    api({
+      method: 'post',
+      url: '/auth/logout',
+      data: {
+        refreshToken,
       },
     }),
 };

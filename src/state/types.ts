@@ -1,6 +1,6 @@
 export interface Token {
   token: string;
-  expires: Date;
+  expires: string;
 }
 
 export interface Article {
