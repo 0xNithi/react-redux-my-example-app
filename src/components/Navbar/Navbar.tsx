@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import config from './config';
+import { useUser } from 'state/user/hooks';
+import { defaultLinks, guestLinks, userLinks } from './config';
 import ThemeSwitcher from './ThemeSwitcher';
 
 const Navbar: React.FC = () => {
+  const { user, handleLogout } = useUser();
   const [open, setOpen] = useState<boolean>(false);
+
   return (
     <div className="fixed top-0 right-0 left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-800">
       <div className="flex flex-row justify-between items-center p-2 mx-auto max-w-6xl h-14">
         <div className="text-xl font-semibold text-pink-600">Example</div>
         <div className="flex flex-row items-center">
           <div className="hidden sm:flex sm:flex-row sm:items-center sm:space-x-4">
-            {config.map((link) => (
+            {defaultLinks.map((link) => (
               <NavLink
                 exact
                 to={link.to}
@@ -22,6 +25,34 @@ const Navbar: React.FC = () => {
                 {link.title}
               </NavLink>
             ))}
+            {user
+              ? userLinks.map((link) => (
+                  <NavLink
+                    exact
+                    to={link.to}
+                    className="font-medium text-black"
+                    activeClassName="text-pink-500"
+                    key={link.title}
+                  >
+                    {link.title}
+                  </NavLink>
+                ))
+              : guestLinks.map((link) => (
+                  <NavLink
+                    exact
+                    to={link.to}
+                    className="font-medium text-black"
+                    activeClassName="text-pink-500"
+                    key={link.title}
+                  >
+                    {link.title}
+                  </NavLink>
+                ))}
+            {user && (
+              <button type="button" className="font-medium text-black active:text-pink-500" onClick={handleLogout}>
+                Logout
+              </button>
+            )}
           </div>
           <ThemeSwitcher />
           <button
@@ -58,7 +89,7 @@ const Navbar: React.FC = () => {
           open ? 'max-h-32 p-2' : 'max-h-0 invisible'
         } transition-all overflow-hidden`}
       >
-        {config.map((link) => (
+        {defaultLinks.map((link) => (
           <NavLink
             exact
             to={link.to}
