@@ -1,14 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ArticlesState } from 'state/types';
+import { Article, ArticlesState } from 'state/types';
 import ArticleAPI from 'api/article';
 
 export const initialState: ArticlesState = {
   articles: [],
 };
 
-export const fetchArticles = createAsyncThunk('articles/fetchArticles', async () => {
+export const fetchArticles = createAsyncThunk<{
+  results: Article[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  totoalResults: number;
+}>('articles/fetchArticles', async () => {
   const response = await ArticleAPI.all();
-  return response;
+  return response.data;
 });
 
 export const articlesSlice = createSlice({
@@ -16,8 +22,8 @@ export const articlesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchArticles.fulfilled, (state, { payload: { data } }) => {
-      state.articles = data.results;
+    builder.addCase(fetchArticles.fulfilled, (state, { payload: { results } }) => {
+      state.articles = results;
     });
   },
 });
