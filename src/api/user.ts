@@ -36,6 +36,14 @@ const UserApi: IUserAPI = {
         refreshToken,
       },
     }),
+  refresh: (refreshToken) =>
+    api({
+      method: 'post',
+      url: '/auth/refresh-tokens',
+      data: {
+        refreshToken,
+      },
+    }),
 };
 
 export default UserApi;
