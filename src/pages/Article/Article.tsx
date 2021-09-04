@@ -1,10 +1,12 @@
 import React from 'react';
 import Layout from 'components/Layout';
+import { Route } from 'react-router-dom';
 
 const Article: React.FC = () => {
   return (
     <Layout title="Article | My Example App">
-      <div className="text-black dark:text-white">Article</div>
+      <Route path="/article/new">New</Route>
+      <Route path="/article/edit/:articleId">Editor</Route>
     </Layout>
   );
 };
