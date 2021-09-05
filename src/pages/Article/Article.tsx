@@ -1,13 +1,14 @@
 import React from 'react';
-import Layout from 'components/Layout';
 import { Route } from 'react-router-dom';
+import New from './New';
+import Edit from './Edit';
 
 const Article: React.FC = () => {
   return (
-    <Layout title="Article | My Example App">
-      <Route path="/article/new">New</Route>
-      <Route path="/article/edit/:articleId">Editor</Route>
-    </Layout>
+    <>
+      <Route exact path="/article/new" component={New} />
+      <Route path="/article/edit/:articleId" component={Edit} />
+    </>
   );
 };
 
