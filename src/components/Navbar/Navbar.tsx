@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useUser } from 'state/user/hooks';
 import { defaultLinks, guestLinks, userLinks } from './config';
 import ThemeSwitcher from './ThemeSwitcher';
@@ -11,7 +11,9 @@ const Navbar: React.FC = () => {
   return (
     <div className="fixed top-0 right-0 left-0 w-full bg-white border-b border-gray-200 dark:bg-gray-800">
       <div className="flex flex-row justify-between items-center p-2 mx-auto max-w-6xl h-14">
-        <div className="text-xl font-semibold text-pink-600">Example</div>
+        <Link to="/" className="text-xl font-semibold text-pink-600">
+          Example
+        </Link>
         <div className="flex flex-row items-center">
           <div className="hidden sm:flex sm:flex-row sm:items-center sm:space-x-4">
             {defaultLinks.map((link) => (
