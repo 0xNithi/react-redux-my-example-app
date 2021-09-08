@@ -20,7 +20,7 @@ const Edit: React.FC = () => {
   return (
     <Layout title="New Article | My Example App">
       <form
-        className="flex flex-col items-center p-6 mx-auto space-y-8 bg-white rounded shadow dark:bg-gray-800"
+        className="flex flex-col items-center p-6 mx-auto space-y-8 bg-white rounded border border-gray-200 shadow dark:bg-gray-800"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="text-4xl font-medium text-black">Edit Article</div>
