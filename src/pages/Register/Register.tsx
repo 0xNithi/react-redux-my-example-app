@@ -1,12 +1,11 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useAppDispatch } from 'state';
-import { fetchRegister } from 'state/user';
+import { useUser } from 'state/user/hooks';
 import Layout from 'components/Layout';
 import { FormRegister } from './types';
 
 const Register: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const { handleRegister } = useUser();
   const {
     register,
     handleSubmit,
@@ -15,13 +14,13 @@ const Register: React.FC = () => {
   } = useForm();
 
   const onSubmit: SubmitHandler<FormRegister> = (data) => {
-    dispatch(fetchRegister(data));
+    handleRegister(data);
   };
 
   return (
     <Layout title="Sign Up | My Example App">
       <form
-        className="flex flex-col items-center p-6 mx-auto space-y-8 max-w-md bg-white rounded shadow dark:bg-gray-800"
+        className="flex flex-col items-center p-6 mx-auto space-y-8 max-w-md bg-white rounded border border-gray-200 shadow dark:bg-gray-800"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="text-4xl font-medium text-black">Sign Up</div>

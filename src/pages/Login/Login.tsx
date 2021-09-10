@@ -1,12 +1,11 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useAppDispatch } from 'state';
-import { fetchLogin } from 'state/user';
+import { useUser } from 'state/user/hooks';
 import Layout from 'components/Layout';
 import { FormLogin } from './types';
 
 const Login: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const { handleLogin } = useUser();
   const {
     register,
     handleSubmit,
@@ -14,13 +13,13 @@ const Login: React.FC = () => {
   } = useForm();
 
   const onSubmit: SubmitHandler<FormLogin> = (data) => {
-    dispatch(fetchLogin(data));
+    handleLogin(data);
   };
 
   return (
     <Layout title="Sign In | My Example App">
       <form
-        className="flex flex-col items-center p-6 mx-auto space-y-8 max-w-md bg-white rounded shadow dark:bg-gray-800"
+        className="flex flex-col items-center p-6 mx-auto space-y-8 max-w-md bg-white rounded border border-gray-200 shadow dark:bg-gray-800"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="text-4xl font-medium text-black">Sign In</div>
