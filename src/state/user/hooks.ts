@@ -2,7 +2,15 @@ import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, AppState } from 'state';
 import { User } from 'state/types';
-import { fetchLogout, fetchRefreshToken, fetchUser, toggleTheme as toggleThemeAction } from '.';
+import { FormLogin } from 'pages/Login/types';
+import {
+  fetchLogin,
+  fetchLogout,
+  fetchRefreshToken,
+  fetchRegister,
+  fetchUser,
+  toggleTheme as toggleThemeAction,
+} from '.';
 
 export const useTheme = (): [boolean, () => void] => {
   const dispatch = useAppDispatch();
@@ -29,14 +37,26 @@ export const useFetchUser = (): void => {
   }, [tokens, dispatch]);
 };
 
-export const useUser = (): { user: User | undefined; handleLogout: () => void } => {
+export const useUser = (): {
+  user: User | undefined;
+  handleRegister: ({ username, password }: FormLogin) => void;
+  handleLogin: ({ username, password }: FormLogin) => void;
+  handleLogout: () => void;
+} => {
   const dispatch = useAppDispatch();
   const { user, tokens } = useSelector<AppState, AppState['user']>((state) => state.user);
+
+  const handleRegister = useCallback(
+    ({ username, password }) => dispatch(fetchRegister({ username, password })),
+    [dispatch],
+  );
+
+  const handleLogin = useCallback(({ username, password }) => dispatch(fetchLogin({ username, password })), [dispatch]);
 
   const handleLogout = useCallback(
     () => tokens && dispatch(fetchLogout({ refreshToken: tokens.refresh.token })),
     [dispatch, tokens],
   );
 
-  return { user, handleLogout };
+  return { user, handleRegister, handleLogin, handleLogout };
 };
