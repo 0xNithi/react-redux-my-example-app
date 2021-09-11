@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useUser } from 'state/user/hooks';
 import Layout from 'components/Layout';
 import { FormLogin } from './types';
 
 const Login: React.FC = () => {
-  const { handleLogin } = useUser();
+  const { push } = useHistory();
+  const { user, initialize, handleLogin } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  useEffect(() => {
+    if (user) push('/');
+  }, [user, push]);
 
   const onSubmit: SubmitHandler<FormLogin> = (data) => {
     handleLogin(data);

@@ -9,6 +9,7 @@ import {
   fetchRefreshToken,
   fetchRegister,
   fetchUser,
+  initialize as initializeAction,
   toggleTheme as toggleThemeAction,
 } from '.';
 
@@ -39,12 +40,17 @@ export const useFetchUser = (): void => {
 
 export const useUser = (): {
   user: User | undefined;
+  initialize: () => void;
   handleRegister: ({ username, password }: FormLogin) => void;
   handleLogin: ({ username, password }: FormLogin) => void;
   handleLogout: () => void;
 } => {
   const dispatch = useAppDispatch();
   const { user, tokens } = useSelector<AppState, AppState['user']>((state) => state.user);
+
+  const initialize = useCallback(() => {
+    dispatch(initializeAction());
+  }, [dispatch]);
 
   const handleRegister = useCallback(
     ({ username, password }) => dispatch(fetchRegister({ username, password })),
@@ -58,5 +64,5 @@ export const useUser = (): {
     [dispatch, tokens],
   );
 
-  return { user, handleRegister, handleLogin, handleLogout };
+  return { user, initialize, handleRegister, handleLogin, handleLogout };
 };

@@ -63,6 +63,10 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    initialize: (state) => {
+      state.user = initialState.user;
+      state.tokens = initialState.tokens;
+    },
     toggleTheme: (state) => {
       state.isDark = !state.isDark;
     },
@@ -97,6 +101,6 @@ export const userSlice = createSlice({
 });
 
 // Actions
-export const { toggleTheme } = userSlice.actions;
+export const { initialize, toggleTheme } = userSlice.actions;
 
 export default userSlice.reducer;
