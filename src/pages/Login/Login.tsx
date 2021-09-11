@@ -7,16 +7,12 @@ import { FormLogin } from './types';
 
 const Login: React.FC = () => {
   const { push } = useHistory();
-  const { user, initialize, handleLogin } = useUser();
+  const { user, handleLogin } = useUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
 
   useEffect(() => {
     if (user) push('/');

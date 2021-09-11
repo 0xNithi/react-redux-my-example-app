@@ -7,17 +7,13 @@ import { FormRegister } from './types';
 
 const Register: React.FC = () => {
   const { push } = useHistory();
-  const { user, initialize, handleRegister } = useUser();
+  const { user, handleRegister } = useUser();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
 
   useEffect(() => {
     if (user) push('/');
