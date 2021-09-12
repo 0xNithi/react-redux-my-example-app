@@ -2,12 +2,13 @@ import React from 'react';
 import classNames from 'utils/classNames';
 
 interface Props {
+  background?: string;
   width?: string;
   height?: string;
 }
 
-const Skeleton: React.FC<Props> = ({ width = 'w-full', height = 'h-full', children }) => {
-  return <div className={classNames('animate-pulse bg-gray-200 rounded', width, height)}>{children}</div>;
+const Skeleton: React.FC<Props> = ({ background = 'bg-gray-500', width = '', height = '', children }) => {
+  return <div className={classNames('animate-pulse rounded w-full h-full', background, width, height)}>{children}</div>;
 };
 
 export default Skeleton;

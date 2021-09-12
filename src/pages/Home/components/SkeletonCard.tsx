@@ -1,13 +1,14 @@
 import React from 'react';
+import Skeleton from 'components/Skeleton';
 
 const SkeletonCard: React.FC = () => {
   return (
     <div className="block p-4 space-y-2 bg-white rounded border border-gray-200 dark:bg-gray-800">
-      <div className="p-4 w-full max-w-sm bg-black rounded animate-pulse" />
-      <div className="p-2 w-full max-w-2xl bg-gray-500 rounded animate-pulse" />
-      <div className="p-2 w-full max-w-xl bg-gray-500 rounded animate-pulse" />
-      <div className="p-2 w-full max-w-3xl bg-gray-500 rounded animate-pulse" />
-      <div className="p-2 w-full max-w-md bg-gray-500 rounded animate-pulse" />
+      <Skeleton background="bg-black" width="w-48" height="h-6" />
+      <Skeleton width="w-80" height="h-4" />
+      <Skeleton width="w-64" height="h-4" />
+      <Skeleton width="w-72" height="h-4" />
+      <Skeleton width="w-32" height="h-4" />
     </div>
   );
 };
