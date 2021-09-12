@@ -12,6 +12,7 @@ export interface Article {
   id: string;
   title: string;
   body: string;
+  user?: string;
 }
 
 export interface UserState {
@@ -22,4 +23,5 @@ export interface UserState {
 
 export interface ArticlesState {
   articles: Article[];
+  isLoading: boolean;
 }

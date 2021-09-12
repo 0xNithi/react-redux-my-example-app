@@ -1,16 +1,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useArticle } from 'state/articles/hooks';
 import Layout from 'components/Layout';
 
 const New: React.FC = () => {
+  const { isLoading, handleCreate } = useArticle();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data: any): void => {
-    console.log(data);
+  const onSubmit = (data: { title: string; body: string }): void => {
+    handleCreate(data);
   };
 
   return (
@@ -26,6 +28,7 @@ const New: React.FC = () => {
             className="input"
             placeholder="Article Title"
             {...register('title', { required: { value: true, message: 'Article Title is required' } })}
+            disabled={isLoading}
           />
           {errors?.title && (
             <div className="absolute text-base font-medium text-pink-600">* {errors.title.message}</div>
@@ -37,10 +40,11 @@ const New: React.FC = () => {
             rows={10}
             placeholder="Article Body"
             {...register('body', { required: { value: true, message: 'Article Body is required' } })}
+            disabled={isLoading}
           />
           {errors?.body && <div className="absolute text-base font-medium text-pink-600">* {errors.body.message}</div>}
         </div>
-        <button type="submit" className="self-end btn btn-primary">
+        <button type="submit" className="self-end btn btn-primary" disabled={isLoading}>
           Publish
         </button>
       </form>
