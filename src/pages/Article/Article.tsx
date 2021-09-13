@@ -10,8 +10,8 @@ const Article: React.FC = () => {
   return (
     <Switch>
       <Route exact path="/article/new" component={New} />
-      <Route path="/article/:articleId" component={View} />
       <Route path="/article/edit/:articleId" component={Edit} />
+      <Route path="/article/:articleId" component={View} />
       <Route component={NotFound} />
     </Switch>
   );
