@@ -9,7 +9,7 @@ interface Props {
 const ArticleCard: React.FC<Props> = ({ article }) => (
   <Link to={`/article/${article.id}`} className="block p-4 bg-white rounded border border-gray-200 dark:bg-gray-800">
     <div className="text-2xl font-semibold text-black">{article.title}</div>
-    <div className="text-base font-normal text-gray-500">{article.body}</div>
+    <div className="text-base font-normal text-gray-500 whitespace-pre-wrap line-clamp-3">{article.body}</div>
   </Link>
 );
 

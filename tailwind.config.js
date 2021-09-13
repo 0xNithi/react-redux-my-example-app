@@ -1,5 +1,4 @@
 /* eslint-disable */
-const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
@@ -21,5 +20,5 @@ module.exports = {
       textColor: ['active'],
     },
   },
-  plugins: [require('nightwind')],
+  plugins: [require('nightwind'), require('@tailwindcss/line-clamp')],
 };
