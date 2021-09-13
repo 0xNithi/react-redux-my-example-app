@@ -1,15 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useArticle } from 'state/articles/hooks';
 import Layout from 'components/Layout';
-import { useParams } from 'react-router-dom';
+import { Article } from 'state/types';
+import Skeleton from 'components/Skeleton';
+import NotFound from 'pages/NotFound';
+import { useUser } from 'state/user/hooks';
 
 const View: React.FC = () => {
+  const [article, setArticle] = useState<Article>();
   const { articleId }: { articleId: string } = useParams();
+  const { handleView, isLoading, error } = useArticle();
+  const { user } = useUser();
+
+  useEffect(() => {
+    setArticle(handleView(articleId));
+  }, [handleView, articleId]);
+
   return (
-    <Layout title="Article | My Example App">
-      <div className="flex flex-col items-center p-6 mx-auto space-y-8 bg-white rounded border border-gray-200 shadow dark:bg-gray-800">
-        <div className="text-4xl font-medium text-black">{articleId}</div>
-      </div>
-    </Layout>
+    <>
+      <Layout title="Article | My Example App">
+        {(isLoading || article) && (
+          <div className="flex flex-col items-center p-6 mx-auto space-y-8 bg-white rounded border border-gray-200 shadow dark:bg-gray-800">
+            <div className="text-4xl font-medium text-black">
+              {article ? article.title : <Skeleton background="bg-black" width="w-64" height="h-8" />}
+            </div>
+            <div className="w-full text-gray-500 whitespace-pre-wrap">
+              {article ? (
+                article.body
+              ) : (
+                <div className="space-y-2">
+                  <Skeleton width="w-80" height="h-4" />
+                  <Skeleton width="w-64" height="h-4" />
+                  <Skeleton width="w-72" height="h-4" />
+                  <Skeleton width="w-32" height="h-4" />
+                </div>
+              )}
+            </div>
+            {article?.user === user?.id && (
+              <div className="flex flex-row self-end space-x-2">
+                <Link to={`/article/edit/${articleId}`} className="btn btn-primary">
+                  Edit
+                </Link>
+                <button type="button" className="btn btn-primary">
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </Layout>
+      {error && <NotFound />}
+    </>
   );
 };
 

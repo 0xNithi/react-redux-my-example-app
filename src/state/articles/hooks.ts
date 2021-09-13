@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, AppState } from 'state';
 import { Article } from 'state/types';
-import { fetchArticles, fetchCreateArticle } from '.';
+import { fetchArticle, fetchArticles, fetchCreateArticle, fetchEditArticle } from '.';
 
 export const useFetchArticles = (): { articles: Article[]; isLoading: boolean } => {
   const dispatch = useAppDispatch();
@@ -17,16 +17,34 @@ export const useFetchArticles = (): { articles: Article[]; isLoading: boolean } 
 
 export const useArticle = (): {
   isLoading: boolean;
+  error: boolean;
+  handleView: (articleId: string) => Article | undefined;
   handleCreate: ({ title, body }: { title: string; body: string }) => void;
+  handleEdit: ({ articleId, title, body }: { articleId: string; title: string; body: string }) => void;
 } => {
   const dispatch = useAppDispatch();
   const tokens = useSelector<AppState, AppState['user']['tokens']>((state) => state.user.tokens);
-  const isLoading = useSelector<AppState, AppState['articles']['isLoading']>((state) => state.articles.isLoading);
+  const { articles, isLoading, error } = useSelector<AppState, AppState['articles']>((state) => state.articles);
+
+  const handleView = useCallback(
+    (articleId) => {
+      const articleFound = articles.find((article) => article.id === articleId);
+      if (!articleFound) dispatch(fetchArticle({ articleId }));
+      return articleFound;
+    },
+    [dispatch, articles],
+  );
 
   const handleCreate = useCallback(
     ({ title, body }) => tokens && dispatch(fetchCreateArticle({ title, body, accessToken: tokens.access.token })),
     [tokens, dispatch],
   );
 
-  return { isLoading, handleCreate };
+  const handleEdit = useCallback(
+    ({ articleId, title, body }) =>
+      tokens && dispatch(fetchEditArticle({ articleId, title, body, accessToken: tokens.access.token })),
+    [tokens, dispatch],
+  );
+
+  return { isLoading, error, handleView, handleCreate, handleEdit };
 };
