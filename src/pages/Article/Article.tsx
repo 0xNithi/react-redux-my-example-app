@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import ProtectedRoute from 'components/ProtectedRoute';
 
 const New = React.lazy(() => import('./New'));
 const View = React.lazy(() => import('./View'));
@@ -9,8 +10,8 @@ const NotFound = React.lazy(() => import('pages/NotFound'));
 const Article: React.FC = () => {
   return (
     <Switch>
-      <Route exact path="/article/new" component={New} />
-      <Route path="/article/edit/:articleId" component={Edit} />
+      <ProtectedRoute exact path="/article/new" component={New} />
+      <ProtectedRoute path="/article/edit/:articleId" component={Edit} />
       <Route path="/article/:articleId" component={View} />
       <Route component={NotFound} />
     </Switch>
