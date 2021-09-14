@@ -43,6 +43,14 @@ export const fetchEditArticle = createAsyncThunk<
   return response.data;
 });
 
+export const fetchDeleteArticle = createAsyncThunk<Article, { articleId: string; accessToken: string }>(
+  'articles/fetchDeleteArticle',
+  async ({ articleId, accessToken }) => {
+    const response = await ArticleAPI.delete(articleId, accessToken);
+    return response.data;
+  },
+);
+
 export const articlesSlice = createSlice({
   name: 'articles',
   initialState,
@@ -58,7 +66,6 @@ export const articlesSlice = createSlice({
       })
       .addCase(fetchArticle.pending, (state) => {
         state.isLoading = true;
-        state.error = false;
       })
       .addCase(fetchArticle.fulfilled, (state, { payload }) => {
         state.articles = [...state.articles, payload];
@@ -78,6 +85,12 @@ export const articlesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(fetchEditArticle.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(fetchDeleteArticle.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchDeleteArticle.fulfilled, (state) => {
         state.isLoading = false;
       });
   },

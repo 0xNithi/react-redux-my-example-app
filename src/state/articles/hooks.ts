@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, AppState } from 'state';
 import { Article } from 'state/types';
-import { fetchArticle, fetchArticles, fetchCreateArticle, fetchEditArticle } from '.';
+import { fetchArticle, fetchArticles, fetchCreateArticle, fetchDeleteArticle, fetchEditArticle } from '.';
 
 export const useFetchArticles = (): { articles: Article[]; isLoading: boolean } => {
   const dispatch = useAppDispatch();
@@ -21,6 +21,7 @@ export const useArticle = (): {
   handleView: (articleId: string) => Article | undefined;
   handleCreate: ({ title, body }: { title: string; body: string }) => void;
   handleEdit: ({ articleId, title, body }: { articleId: string; title: string; body: string }) => void;
+  handleDelete: ({ articleId }: { articleId: string }) => void;
 } => {
   const dispatch = useAppDispatch();
   const tokens = useSelector<AppState, AppState['user']['tokens']>((state) => state.user.tokens);
@@ -46,5 +47,10 @@ export const useArticle = (): {
     [tokens, dispatch],
   );
 
-  return { isLoading, error, handleView, handleCreate, handleEdit };
+  const handleDelete = useCallback(
+    ({ articleId }) => tokens && dispatch(fetchDeleteArticle({ articleId, accessToken: tokens.access.token })),
+    [tokens, dispatch],
+  );
+
+  return { isLoading, error, handleView, handleCreate, handleEdit, handleDelete };
 };
