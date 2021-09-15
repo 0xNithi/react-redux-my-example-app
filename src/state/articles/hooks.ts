@@ -2,7 +2,14 @@ import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, AppState } from 'state';
 import { Article } from 'state/types';
-import { fetchArticle, fetchArticles, fetchCreateArticle, fetchDeleteArticle, fetchEditArticle } from '.';
+import {
+  fetchArticle,
+  fetchArticles,
+  fetchCreateArticle,
+  fetchDeleteArticle,
+  fetchEditArticle,
+  initialize as initializeAction,
+} from '.';
 
 export const useFetchArticles = (): { articles: Article[]; isLoading: boolean } => {
   const dispatch = useAppDispatch();
@@ -51,6 +58,10 @@ export const useArticle = (): {
     ({ articleId }) => tokens && dispatch(fetchDeleteArticle({ articleId, accessToken: tokens.access.token })),
     [tokens, dispatch],
   );
+
+  useEffect(() => {
+    dispatch(initializeAction());
+  }, []);
 
   return { isLoading, error, handleView, handleCreate, handleEdit, handleDelete };
 };

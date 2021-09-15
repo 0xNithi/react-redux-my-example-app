@@ -54,18 +54,26 @@ export const fetchDeleteArticle = createAsyncThunk<Article, { articleId: string;
 export const articlesSlice = createSlice({
   name: 'articles',
   initialState,
-  reducers: {},
+  reducers: {
+    initialize: (state) => {
+      return { ...initialState, articles: state.articles };
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchArticles.pending, (state) => {
-        state.isLoading = true;
-      })
+      .addCase(
+        fetchArticles.pending ||
+          fetchArticle.pending ||
+          fetchCreateArticle.pending ||
+          fetchEditArticle.pending ||
+          fetchDeleteArticle.pending,
+        (state) => {
+          state.isLoading = true;
+        },
+      )
       .addCase(fetchArticles.fulfilled, (state, { payload: { results } }) => {
         state.articles = results;
         state.isLoading = false;
-      })
-      .addCase(fetchArticle.pending, (state) => {
-        state.isLoading = true;
       })
       .addCase(fetchArticle.fulfilled, (state, { payload }) => {
         state.articles = [...state.articles, payload];
@@ -75,25 +83,13 @@ export const articlesSlice = createSlice({
         state.isLoading = false;
         state.error = true;
       })
-      .addCase(fetchCreateArticle.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchCreateArticle.fulfilled, (state) => {
-        state.isLoading = false;
-      })
-      .addCase(fetchEditArticle.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchEditArticle.fulfilled, (state) => {
-        state.isLoading = false;
-      })
-      .addCase(fetchDeleteArticle.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchDeleteArticle.fulfilled, (state) => {
+      .addCase(fetchCreateArticle.fulfilled || fetchEditArticle.fulfilled || fetchDeleteArticle.fulfilled, (state) => {
         state.isLoading = false;
       });
   },
 });
+
+// Actions
+export const { initialize } = articlesSlice.actions;
 
 export default articlesSlice.reducer;
