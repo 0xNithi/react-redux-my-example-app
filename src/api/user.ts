@@ -44,6 +44,18 @@ const UserApi: IUserAPI = {
         refreshToken,
       },
     }),
+  update: (accessToken, username, password) =>
+    api({
+      method: 'patch',
+      url: '/users',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: {
+        username,
+        password,
+      },
+    }),
 };
 
 export default UserApi;

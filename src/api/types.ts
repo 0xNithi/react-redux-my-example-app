@@ -47,4 +47,9 @@ export interface IUserAPI {
   >;
   logout: (refreshToken: string) => Promise<AxiosResponse>;
   refresh: (refreshToken: string) => Promise<AxiosResponse<{ access: Token; refresh: Token }>>;
+  update: (
+    accessToken: string,
+    username?: string,
+    password?: string,
+  ) => Promise<AxiosResponse<{ id: string; username: string }>>;
 }
