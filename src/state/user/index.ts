@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import UserApi from 'api/user';
 import { Token, User, UserState } from 'state/types';
 
@@ -6,6 +7,7 @@ export const initialState: UserState = {
   user: undefined,
   tokens: undefined,
   isDark: false,
+  error: undefined,
 };
 
 export const fetchRegister = createAsyncThunk<
@@ -59,10 +61,32 @@ export const fetchRefreshToken = createAsyncThunk<
   return response.data;
 });
 
+export const fetchUpdateUser = createAsyncThunk<
+  User,
+  { accessToken: string; username?: string; password?: string },
+  {
+    rejectValue: { message: string };
+  }
+>('user/fetchUpdateUser', async ({ accessToken, username, password }, { rejectWithValue }) => {
+  try {
+    const response = await UserApi.update(accessToken, username, password);
+    return response.data;
+  } catch (err) {
+    const error: AxiosError<{ message: string }> = err as AxiosError<{ message: string }>;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    resetError: (state) => {
+      delete state.error;
+    },
     toggleTheme: (state) => {
       state.isDark = !state.isDark;
     },
@@ -92,11 +116,17 @@ export const userSlice = createSlice({
           access,
           refresh,
         };
+      })
+      .addCase(fetchUpdateUser.fulfilled, (state, { payload }) => {
+        state.user = payload;
+      })
+      .addCase(fetchUpdateUser.rejected, (state, { payload }) => {
+        state.error = payload?.message;
       });
   },
 });
 
 // Actions
-export const { toggleTheme } = userSlice.actions;
+export const { resetError, toggleTheme } = userSlice.actions;
 
 export default userSlice.reducer;

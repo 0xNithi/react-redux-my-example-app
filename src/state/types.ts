@@ -16,13 +16,14 @@ export interface Article {
 }
 
 export interface UserState {
-  user: User | undefined;
-  tokens: { access: Token; refresh: Token } | undefined;
+  user?: User;
+  tokens?: { access: Token; refresh: Token };
   isDark: boolean;
+  error?: string;
 }
 
 export interface ArticlesState {
   articles: Article[];
   isLoading: boolean;
-  error: boolean;
+  error?: string;
 }

@@ -24,7 +24,7 @@ export const useFetchArticles = (): { articles: Article[]; isLoading: boolean } 
 
 export const useArticle = (): {
   isLoading: boolean;
-  error: boolean;
+  error?: string;
   handleView: (articleId: string) => Article | undefined;
   handleCreate: ({ title, body }: { title: string; body: string }) => void;
   handleEdit: ({ articleId, title, body }: { articleId: string; title: string; body: string }) => void;

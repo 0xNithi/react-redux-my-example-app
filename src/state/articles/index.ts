@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { Article, ArticlesState } from 'state/types';
 import ArticleAPI from 'api/article';
 
 export const initialState: ArticlesState = {
   articles: [],
   isLoading: false,
-  error: false,
+  error: undefined,
 };
 
 export const fetchArticles = createAsyncThunk<{
@@ -19,13 +20,24 @@ export const fetchArticles = createAsyncThunk<{
   return response.data;
 });
 
-export const fetchArticle = createAsyncThunk<Article, { articleId: string }>(
-  'articles/fetchArticle',
-  async ({ articleId }) => {
+export const fetchArticle = createAsyncThunk<
+  Article,
+  { articleId: string },
+  {
+    rejectValue: { message: string };
+  }
+>('articles/fetchArticle', async ({ articleId }, { rejectWithValue }) => {
+  try {
     const response = await ArticleAPI.get(articleId);
     return response.data;
-  },
-);
+  } catch (err) {
+    const error: AxiosError<{ message: string }> = err as AxiosError<{ message: string }>;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});
 
 export const fetchCreateArticle = createAsyncThunk<Article, { title: string; body: string; accessToken: string }>(
   'articles/fetchCreateArticle',
@@ -79,9 +91,9 @@ export const articlesSlice = createSlice({
         state.articles = [...state.articles, payload];
         state.isLoading = false;
       })
-      .addCase(fetchArticle.rejected, (state) => {
+      .addCase(fetchArticle.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.error = true;
+        state.error = payload?.message;
       })
       .addCase(fetchCreateArticle.fulfilled || fetchEditArticle.fulfilled || fetchDeleteArticle.fulfilled, (state) => {
         state.isLoading = false;

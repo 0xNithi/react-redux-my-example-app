@@ -3,12 +3,15 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch, AppState } from 'state';
 import { User } from 'state/types';
 import { FormLogin } from 'pages/Login/types';
+import { FormSettings } from 'pages/Settings/types';
 import {
   fetchLogin,
   fetchLogout,
   fetchRefreshToken,
   fetchRegister,
+  fetchUpdateUser,
   fetchUser,
+  resetError as resetErrorAction,
   toggleTheme as toggleThemeAction,
 } from '.';
 
@@ -38,13 +41,15 @@ export const useFetchUser = (): void => {
 };
 
 export const useUser = (): {
-  user: User | undefined;
+  user?: User;
+  error?: string;
   handleRegister: ({ username, password }: FormLogin) => void;
   handleLogin: ({ username, password }: FormLogin) => void;
   handleLogout: () => void;
+  handleUpdate: ({ username, password }: FormSettings) => void;
 } => {
   const dispatch = useAppDispatch();
-  const { user, tokens } = useSelector<AppState, AppState['user']>((state) => state.user);
+  const { user, error, tokens } = useSelector<AppState, AppState['user']>((state) => state.user);
 
   const handleRegister = useCallback(
     ({ username, password }) => dispatch(fetchRegister({ username, password })),
@@ -55,8 +60,18 @@ export const useUser = (): {
 
   const handleLogout = useCallback(
     () => tokens && dispatch(fetchLogout({ refreshToken: tokens.refresh.token })),
-    [dispatch, tokens],
+    [tokens, dispatch],
   );
 
-  return { user, handleRegister, handleLogin, handleLogout };
+  const handleUpdate = useCallback(
+    ({ username, password }) =>
+      tokens && dispatch(fetchUpdateUser({ accessToken: tokens.access.token, username, password })),
+    [tokens, dispatch],
+  );
+
+  useEffect(() => {
+    dispatch(resetErrorAction());
+  }, [dispatch]);
+
+  return { user, error, handleRegister, handleLogin, handleLogout, handleUpdate };
 };
