@@ -40,7 +40,7 @@ export const useArticle = (): {
       if (!articleFound) dispatch(fetchArticle({ articleId }));
       return articleFound;
     },
-    [dispatch, articles],
+    [articles, dispatch],
   );
 
   const handleCreate = useCallback(
@@ -61,7 +61,7 @@ export const useArticle = (): {
 
   useEffect(() => {
     dispatch(initializeAction());
-  }, []);
+  }, [dispatch]);
 
   return { isLoading, error, handleView, handleCreate, handleEdit, handleDelete };
 };
