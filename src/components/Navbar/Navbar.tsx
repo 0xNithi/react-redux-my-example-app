@@ -102,6 +102,34 @@ const Navbar: React.FC = () => {
             {link.title}
           </NavLink>
         ))}
+        {user
+          ? userLinks.map((link) => (
+              <NavLink
+                exact
+                to={link.to}
+                className="w-full font-medium text-black"
+                activeClassName="text-pink-500"
+                key={link.title}
+              >
+                {link.title}
+              </NavLink>
+            ))
+          : guestLinks.map((link) => (
+              <NavLink
+                exact
+                to={link.to}
+                className="w-full font-medium text-black"
+                activeClassName="text-pink-500"
+                key={link.title}
+              >
+                {link.title}
+              </NavLink>
+            ))}
+        {user && (
+          <button type="button" className="font-medium text-black active:text-pink-500" onClick={handleLogout}>
+            Logout
+          </button>
+        )}
       </div>
     </div>
   );
