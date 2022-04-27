@@ -1,4 +1,4 @@
-import api from 'utils/api';
+import api from '.';
 import { IArticleAPI } from './types';
 
 const ArticleAPI: IArticleAPI = {
